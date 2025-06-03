@@ -26,10 +26,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS 설정
+# CORS 설정 - 모든 도메인 허용으로 임시 변경
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("ALLOWED_ORIGINS", "").split(","),
+    allow_origins=["*"],  # 모든 오리진 허용
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -78,6 +78,36 @@ async def startup_event():
         logger.warning("LangGraph API is not available, some features may not work properly")
     
     logger.info("Application startup complete")
+
+# 루트 엔드포인트 추가
+@app.get("/")
+async def root():
+    """기본 정보를 반환하는 루트 엔드포인트"""
+    return {
+        "app": "Chat Backend API",
+        "version": "1.0.0",
+        "description": "LangChain + FastAPI Chat Backend for LangGraph",
+        "endpoints": {
+            "health": "/api/health",
+            "graph": "/graph/",
+            "chat": "/api/chat/completions",
+            "models": "/api/chat/models"
+        }
+    }
+
+# LangGraph 워크플로우 정보 엔드포인트 추가
+@app.get("/graph/")
+async def graph_info():
+    """LangGraph 워크플로우 정보를 반환합니다"""
+    from app.routers.chat import chat_workflow
+    
+    return {
+        "status": "active",
+        "workflow_type": "chat",
+        "entry_point": "process",
+        "nodes": ["process"],
+        "timestamp": datetime.now().isoformat()
+    }
 
 @app.get("/api/health")
 async def health_check():
