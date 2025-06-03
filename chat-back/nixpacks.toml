@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["python310"]
+
+[phases.install]
+cmds = [
+  "python -m pip install --upgrade pip",
+  "pip install -r requirements.txt"
+]
+
+[start]
+cmd = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+
+[env]
+PORT = "8000"
+
+[nixpkgs]
+python = "python310"

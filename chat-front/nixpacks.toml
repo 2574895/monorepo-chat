@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ["nodejs", "nodejs.pkgs.pnpm"]
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["pnpm build"]
+
+[start]
+cmd = "pnpm start"
+
+[env]
+PORT = "3000"
+NODE_ENV = "production"
+
+[nixpkgs]
+nodejs = "nodejs_20"
