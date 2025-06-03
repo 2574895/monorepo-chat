@@ -1,0 +1,37 @@
+{
+  "buildCommand": "cd chat-front && pnpm install --frozen-lockfile && pnpm build",
+  "outputDirectory": "chat-front/.vercel/output",
+  "devCommand": "cd chat-front && pnpm dev",
+  "installCommand": "cd chat-front && pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://chat-back-xxxxx.onrender.com/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_DISABLE_LANGSMITH_SETUP": "true",
+    "NEXT_PUBLIC_DISABLE_DEPLOYMENT_URL_SETUP": "true",
+    "NEXT_PUBLIC_ASSISTANT_ID": "agent"
+  }
+}
