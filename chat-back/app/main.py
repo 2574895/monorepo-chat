@@ -26,10 +26,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS 설정 - 모든 도메인 허용으로 임시 변경
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 모든 오리진 허용
+    allow_origins=os.getenv("ALLOWED_ORIGINS", "https://front-production-7b09.up.railway.app,http://localhost:3000").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -126,6 +126,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
         host=os.getenv("APP_HOST", "0.0.0.0"),
-        port=int(os.getenv("APP_PORT", "8000")),
+        port=int(os.getenv("PORT", "8080")),  # Railway 표준 PORT 환경 변수 사용, 기본값 8080
         reload=os.getenv("APP_ENV") == "development"
     )
